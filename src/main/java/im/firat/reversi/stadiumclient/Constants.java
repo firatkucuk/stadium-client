@@ -1,5 +1,5 @@
 
-package fr.firat.reversi.stadiumclient;
+package im.firat.reversi.stadiumclient;
 
 /**
  * General purpose constants for Reversi game

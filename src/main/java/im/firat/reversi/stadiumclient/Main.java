@@ -1,6 +1,6 @@
-package fr.firat.reversi.stadiumclient;
+package im.firat.reversi.stadiumclient;
 
-import fr.firat.reversi.stadiumclient.models.ReversiGameStatus;
+import im.firat.reversi.stadiumclient.models.ReversiGameStatus;
 import java.util.*;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;

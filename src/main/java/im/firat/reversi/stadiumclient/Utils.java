@@ -1,9 +1,9 @@
 
-package fr.firat.reversi.stadiumclient;
+package im.firat.reversi.stadiumclient;
 
 import java.util.List;
 
-import static fr.firat.reversi.stadiumclient.Constants.*;
+import static im.firat.reversi.stadiumclient.Constants.*;
 
 
 

@@ -1,5 +1,5 @@
 
-package fr.firat.reversi.stadiumclient.models;
+package im.firat.reversi.stadiumclient.models;
 
 import java.util.List;
 

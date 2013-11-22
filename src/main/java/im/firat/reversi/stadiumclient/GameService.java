@@ -1,8 +1,8 @@
 
-package fr.firat.reversi.stadiumclient;
+package im.firat.reversi.stadiumclient;
 
-import fr.firat.reversi.stadiumclient.models.GameStatus;
-import fr.firat.reversi.stadiumclient.models.ReversiGameStatus;
+import im.firat.reversi.stadiumclient.models.GameStatus;
+import im.firat.reversi.stadiumclient.models.ReversiGameStatus;
 import javax.ws.rs.*;
 
 

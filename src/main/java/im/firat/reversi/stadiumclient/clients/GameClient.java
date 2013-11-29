@@ -1,13 +1,18 @@
 
-package im.firat.reversi.stadiumclient;
+package im.firat.reversi.stadiumclient.clients;
 
-import im.firat.reversi.stadiumclient.models.GameStatus;
-import im.firat.reversi.stadiumclient.models.ReversiGameStatus;
+
+import im.firat.reversi.stadiumclient.domain.Authorization;
+import im.firat.reversi.stadiumclient.domain.Game;
 import javax.ws.rs.*;
 
 
 
-public interface GameService {
+/**
+ * This is main service class. This can provide restful web service for external applications.
+ */
+@Path("/")
+public interface GameClient {
 
 
 
@@ -16,16 +21,7 @@ public interface GameService {
     @DELETE
     @Path("/cancel/{cancellationCode}")
     @Produces("application/json")
-    public ReversiGameStatus cancelGame(@PathParam("cancellationCode") String cancellationCode);
-
-
-
-    //~ ----------------------------------------------------------------------------------------------------------------
-
-    @GET
-    @Path("/status")
-    @Produces("application/json")
-    public ReversiGameStatus getGameStatus();
+    public Game cancel(@PathParam("cancellationCode") final String cancellationCode);
 
 
 
@@ -34,8 +30,8 @@ public interface GameService {
     @PUT
     @Path("/move/{authCode}/{piece}")
     @Produces("application/json")
-    public ReversiGameStatus movePiece(@PathParam("authCode") String authCode,
-            @PathParam("piece") String piece);
+    public Game move(@PathParam("authCode") final String authCode,
+            @PathParam("piece") final String piece);
 
 
 
@@ -44,5 +40,14 @@ public interface GameService {
     @POST
     @Path("/start")
     @Produces("application/json")
-    public GameStatus startGame();
+    public Authorization start();
+
+
+
+    //~ ----------------------------------------------------------------------------------------------------------------
+
+    @GET
+    @Path("/status")
+    @Produces("application/json")
+    public Game status();
 }

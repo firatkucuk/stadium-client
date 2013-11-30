@@ -1,6 +1,8 @@
 package im.firat.reversi.stadiumclient;
 
-import im.firat.reversi.stadiumclient.models.ReversiGameStatus;
+import im.firat.reversi.domain.Game;
+import im.firat.reversi.services.GameService;
+import im.firat.reversi.stadiumclient.clients.GameClient;
 import java.util.*;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
@@ -19,11 +21,13 @@ public class Main {
 
     //~ --- [CONSTRUCTORS] ---------------------------------------------------------------------------------------------
 
-    public Main(String serverUrl, String authCode, int player) {
+    public Main(final String baseAddress, final String authCode, final int player) {
 
-        TimerTask pollerTask = new PollerTask(serverUrl, authCode, player);
+        List<JacksonJsonProvider> providers  = Arrays.asList(new JacksonJsonProvider());
+        GameClient                client     = JAXRSClientFactory.create(baseAddress, GameClient.class, providers);
+        TimerTask                 pollerTask = new PollerTask(authCode, player, client);
 
-        timer.scheduleAtFixedRate(pollerTask, 5000, 5000);
+        timer.scheduleAtFixedRate(pollerTask, 500, 500);
     }
 
 
@@ -32,35 +36,11 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String serverUrl = System.getenv("RS_SERVER_URL");
+        final String baseAddress = "http://localhost:8080/reversi-stadium/rest/";
+        final String authCode    = "change me";
+        final int    player      = GameService.BLACK_PLAYER;
 
-        if (serverUrl == null || serverUrl.isEmpty()) {
-
-            serverUrl = "http://localhost:8080/reversi-stadium/";
-        }
-
-        String authCode = System.getenv("RS_AUTH_CODE");
-
-        if (authCode == null || authCode.isEmpty()) {
-
-            System.err.println("No authentication code for current player found");
-
-            return;
-        }
-
-        String player = System.getenv("RS_PLAYER");
-
-        if (player == null || player.isEmpty()) {
-            System.err.println("No player environmental variable defined.");
-
-            return;
-        } else if (!player.equals("1") && !player.equals("2")) {
-            System.err.println("Player variable should be 1 or 2.");
-
-            return;
-        }
-
-        new Main(serverUrl, authCode, Integer.parseInt(player));
+        new Main(baseAddress, authCode, player);
     }
 
 
@@ -73,21 +53,19 @@ public class Main {
 
         //~ --- [INSTANCE FIELDS] --------------------------------------------------------------------------------------
 
-        private String      authCode;
-        private int         player;
-        private GameService service;
+        private final String     authCode;
+        private final GameClient client;
+        private final int        player;
 
 
 
         //~ --- [CONSTRUCTORS] -----------------------------------------------------------------------------------------
 
-        private PollerTask(String serverUrl, String authCode, int player) {
+        private PollerTask(final String authCode, final int player, final GameClient client) {
 
             this.authCode = authCode;
             this.player   = player;
-
-            List<JacksonJsonProvider> providers = Arrays.asList(new JacksonJsonProvider());
-            service = JAXRSClientFactory.create(serverUrl, GameService.class, providers);
+            this.client   = client;
         }
 
 
@@ -97,20 +75,20 @@ public class Main {
         @Override
         public void run() {
 
-            ReversiGameStatus reversiGameStatus = service.getGameStatus();
+            Game game = client.status();
 
-            if (reversiGameStatus.isCancelled()) {
+            if (game.isCancelled()) {
                 timer.cancel();
-            } else if (!reversiGameStatus.isStarted()) {
+            } else if (!game.isStarted()) {
                 timer.cancel();
-            } else if (reversiGameStatus.getCurrentPlayer() == player) {
+            } else if (game.getCurrentPlayer() == player) {
 
-                List<String> availableMoves = reversiGameStatus.getAvailableMoves();
+                List<String> availableMoves = game.getAvailableMoves();
                 Random       random         = new Random();
                 int          randomInt      = random.nextInt(availableMoves.size());
                 String       nextMove       = availableMoves.get(randomInt);
 
-                service.movePiece(authCode, nextMove);
+                client.move(authCode, nextMove);
             }
         }
     }

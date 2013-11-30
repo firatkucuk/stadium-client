@@ -2,8 +2,8 @@
 package im.firat.reversi.stadiumclient.clients;
 
 
-import im.firat.reversi.stadiumclient.domain.Authorization;
-import im.firat.reversi.stadiumclient.domain.Game;
+import im.firat.reversi.domain.Authorization;
+import im.firat.reversi.domain.Game;
 import javax.ws.rs.*;
 
 

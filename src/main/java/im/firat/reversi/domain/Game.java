@@ -1,11 +1,20 @@
 
-package im.firat.reversi.stadiumclient.models;
+package im.firat.reversi.domain;
 
+import im.firat.reversi.core.Utils;
+import java.io.Serializable;
 import java.util.List;
 
 
 
-public class ReversiGameStatus {
+public class Game implements Serializable {
+
+
+
+    //~ --- [STATIC FIELDS/INITIALIZERS] -------------------------------------------------------------------------------
+
+    /** Use serialVersionUID for interoperability. */
+    private static final long serialVersionUID = 1L;
 
 
 
@@ -21,7 +30,7 @@ public class ReversiGameStatus {
 
     //~ --- [CONSTRUCTORS] ---------------------------------------------------------------------------------------------
 
-    public ReversiGameStatus() {
+    public Game() {
 
     }
 
@@ -113,5 +122,15 @@ public class ReversiGameStatus {
     public void setStarted(boolean started) {
 
         this.started = started;
+    }
+
+
+
+    //~ ----------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public String toString() {
+
+        return Utils.getBoardStateRepresentation(boardState);
     }
 }

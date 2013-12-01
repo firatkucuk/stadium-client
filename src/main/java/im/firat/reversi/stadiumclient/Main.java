@@ -37,7 +37,7 @@ public class Main {
     public static void main(String[] args) {
 
         final String baseAddress = "http://localhost:8080/reversi-stadium/rest/";
-        final String authCode    = "change me";
+        final String authCode    = "nxtf0248";
         final int    player      = GameService.BLACK_PLAYER;
 
         new Main(baseAddress, authCode, player);
